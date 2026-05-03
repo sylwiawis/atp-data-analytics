@@ -18,7 +18,7 @@ Output: one row per streak per player, with start date, end date,
 ============================================================
 */
 
-CREATE OR ALTER VIEW gold.win_streak AS 
+CREATE OR ALTER VIEW win_streak AS 
 WITH match_sequence AS (
     SELECT
         s.player_id,
@@ -52,4 +52,3 @@ SELECT
     is_win
 FROM streaks;
 
-select * from win_streak

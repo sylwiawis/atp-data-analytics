@@ -2,14 +2,13 @@
 
 # ATP Tour Analytics | 2000–2025
 
-An end-to-end data analytics project built on ATP Tour match data from 2000 to 2025. The dashboard was designed from the perspective of a **tennis coaching staff or player agent** - providing tools to analyze player performance, track career trends, compare opponents head-to-head, and identify patterns across surfaces and playing styles.
+An end-to-end data analytics project built on ATP Tour match data from 2000 to 2025. The dashboard was designed from the perspective of a tennis enthusiast or coaching staff — providing tools to analyze player performance, track career trends, and identify patterns across surfaces and playing styles.
 
 ---
 
 ## Data Source
 
-Raw data sourced from [TML Database](https://github.com/Tennismylife/TML-Database) - a complete, live-updated database of ATP tournaments and matches, originally inspired by Jeff Sackmann's tennis_atp repository. Key advantages of this source include fully integrated missing data, use of official ATP player IDs, and daily updates based on ATP official results and corrections.
-
+Raw data sourced from [TML Database](https://github.com/Tennismylife/TML-Database) — a complete, live-updated database of ATP tournaments and matches, originally inspired by Jeff Sackmann's tennis_atp repository.
 ---
 
 ## Project Architecture
@@ -38,35 +37,27 @@ Data cleaning and standardization layer. Key transformations include:
 - Fixing data entry errors (e.g. birthdates loaded into weight column)
 - Handling nulls with `COALESCE` and setting valid value ranges for height and weight
 - Standardizing categorical fields (hand, backhand, surface) using `CASE WHEN`
+- Deduplicating matches (Davis Cup recorded under multiple IDs, round number conflicts)
+- Manual fixes for known data issues (duplicate player IDs, incorrect IOC codes)
 - Filtering out players with no match records
 
 ### Gold
-Business-ready layer structured as a **star schema** for efficient querying in Power BI:
-
-```
-                    ┌─────────────────┐
-                    │  dim_players    │
-                    └────────┬────────┘
-                             │
-┌──────────────┐    ┌────────▼────────┐    ┌──────────────────────────┐
-│dim_tournaments├───►   fact_match    ◄────┤ fact_match_player_stats  │
-└──────────────┘    └─────────────────┘    └──────────────────────────┘
-```
+Business-ready layer optimized for Power BI reporting:
 
 | Table | Description |
 |-------|-------------|
-| `dim_players` | Player profiles - name, nationality, height, weight, hand, backhand, birthdate |
+| `dim_players` | Player profiles — name, nationality, height, weight, hand, backhand, birthdate |
 | `dim_tournaments` | Tournament details — name, surface, level (Grand Slam, Masters, etc.), indoor flag |
-| `fact_match` | One row per match - winner/loser IDs, score, duration, round, upset flag |
-| `fact_match_player_stats` | One row per player per match - ranking, rank points, serve stats, break points |
+| `fact_match` | One row per match — winner/loser IDs, score, duration, round, upset flag |
+| `fact_match_player_stats` | One row per player per match — ranking, rank points, serve stats, break points |
 
-Additional views built on top of gold:
+Additional analytical views:
 
 | View | Description |
 |------|-------------|
 | `win_streak` | Consecutive win/loss streaks per player |
-| `player_ranking_trend` | Ranking points per match with 10 and 20-match moving averages |
-| `player_aces_trend` | Aces per match trend over career |
+| `player_ranking_trend` | Ranking points with 10 and 20-match moving averages |
+| `player_aces_trend` | Aces per match trend with 10-match moving average |
 
 ---
 
@@ -81,11 +72,25 @@ Additional views built on top of gold:
 ## Key SQL Techniques
 
 - **CTEs** - used throughout silver and gold layers for readable, modular queries
-- **Window functions** - `ROW_NUMBER()` for streak detection, `LAG()` for year-over-year ranking comparison, `AVG() OVER()` for moving averages, `LAST_VALUE() IGNORE NULLS` for forward-filling missing ranking data
+- **Window functions** — `ROW_NUMBER()` for deduplication, streak detection and match sequencing, `AVG() OVER()` for moving averages
 - **`CASE WHEN`** - data standardization, bucketing (duration categories, upset categories, height groups)
 - **`UNION ALL`** - combining winner and loser perspectives into a single player-level stats table
 - **`CAST`, `TRIM`, `COALESCE`** - data type corrections and null handling in silver layer
 - **Aggregate functions** - `MIN`, `MAX`, `COUNT`, `SUM` across multiple grouping levels
+
+---
+
+## DAX Highlights
+Key measures implemented in Power BI:
+- Win rate, first serve %, second serve %, break points saved rate
+- Ace to double fault ratio
+- Age at first World No. 1 using `MINX` and `FILTER`
+- `COALESCE` used throughout to replace BLANK with 0
+
+--- 
+
+## Data Quality
+Quality checks were performed at each layer (bronze, silver, gold) to validate row counts, identify outliers, verify referential integrity, and document known data issues before applying fixes in silver.
 
 ---
 
@@ -101,13 +106,12 @@ A detailed view of an individual player's career, filterable by name. Includes:
 - Results by surface
 - Serve statistics - aces per match, double faults, ace-to-DF ratio, 1st serve %, 1st serve points won %, 2nd serve points won %
 - Career Ranking Points Trend with 10-match and 20-match moving averages
-- Head-to-head navigation
 
 ### Top Players
 ![Top Players](screenshots/top_players.png)
 
 Comparative analysis of the best players in the dataset:
-- Total titles by tournament type with drill-down
+- Total titles by tournament type
 - Age at first World No. 1
 - Longest winning streak
 - Top servers - aces, double faults, ace-to-DF ratio
@@ -119,9 +123,9 @@ Comparative analysis of the best players in the dataset:
 
 Exploratory analysis and pattern discovery:
 - Upset rate by round
-- Win rate by age (filtered to players with 100+ matches)
+- Win rate by age )
 - Average and longest match duration
-- ATP players by country with highest-ever ranking on hover
+- Count of ATP players by country with highest-ever ranking on hover
 - Average aces per match by height group
 - Win rate by playing style - hand and backhand type
 
@@ -135,8 +139,7 @@ Run scripts in the following order:
 ```
 1. sql/bronze/        → create tables and load raw CSV data
 2. sql/silver/        → run stored procedures for players and matches
-3. sql/gold/          → run dimension views first, then fact views
-4. sql/gold/views/    → run additional analytical views
+3. sql/gold/          → run dimension scripts first, then fact scripts, then analytical views
 ```
 
 Then open `atp_tour_analytics.pbix` in Power BI Desktop and refresh the data source connection.
