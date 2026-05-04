@@ -1,5 +1,3 @@
-# atp-data-analysis
-
 # ATP Tour Analytics | 2000–2025
 
 ## Project Goal
