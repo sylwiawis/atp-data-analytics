@@ -104,6 +104,14 @@ Quality checks were performed at each layer (bronze, silver, gold) to validate r
 
 ## Dashboard Overview
 
+An interactive version of the dashboard is available online:
+
+🔗 **[Live Interactive Dashboard](https://sylwiawis.github.io/atp-data-analytics/)**
+
+Users with a Power BI account can explore the report without downloading the project.
+
+---
+
 ### Player Profile
 ![Player Profile](screenshots/player_profile.png)
 
@@ -136,16 +144,6 @@ Exploratory analysis and pattern discovery:
 - Count of ATP players by country with highest-ever ranking on hover
 - Average aces per match by height group
 - Win rate by playing style - hand and backhand type
-
----
-
-## Live Dashboard
-
-An interactive version of the dashboard is available online:
-
-🔗 **[Live Interactive Dashboard](https://sylwiawis.github.io/atp-data-analytics/)**
-
-Users with a Power BI account can explore the report without downloading the project.
 
 ---
 
