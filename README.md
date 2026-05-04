@@ -2,6 +2,10 @@
 
 # ATP Tour Analytics | 2000–2025
 
+## Project Goal
+
+The goal of this project is to analyze ATP match data to better understand player performance, career progression, and match dynamics. It focuses on identifying trends across surfaces, playing styles, and match conditions, and translating raw data into insights useful for tennis enthusiasts, analysts, or coaching staff.
+
 An end-to-end data analytics project built on ATP Tour match data from 2000 to 2025. The dashboard was designed from the perspective of a tennis enthusiast or coaching staff — providing tools to analyze player performance, track career trends, and identify patterns across surfaces and playing styles.
 
 ---
@@ -9,6 +13,12 @@ An end-to-end data analytics project built on ATP Tour match data from 2000 to 2
 ## Data Source
 
 Raw data sourced from [TML Database](https://github.com/Tennismylife/TML-Database) — a complete, live-updated database of ATP tournaments and matches, originally inspired by Jeff Sackmann's tennis_atp repository.
+
+Download the following files from the source repository:
+
+* ATP match data (2000–2025) — yearly CSV files (`YYYY.csv`)
+* Player data — `ATP_Database.csv`
+
 ---
 
 ## Project Architecture
@@ -129,6 +139,15 @@ Exploratory analysis and pattern discovery:
 - Average aces per match by height group
 - Win rate by playing style - hand and backhand type
 
+---
+
+## Live Dashboard
+
+An interactive version of the dashboard is available online:
+
+* *
+
+Users with a Power BI account can explore the report without downloading the project.
 
 ---
 
@@ -137,10 +156,12 @@ Exploratory analysis and pattern discovery:
 Run scripts in the following order:
 
 ```
+0. sql/00_init.sql    → create database and schemas
 1. sql/bronze/        → create tables and load raw CSV data
 2. sql/silver/        → run stored procedures for players and matches
 3. sql/gold/          → run fact and dimension scripts first, then then analytical views
 ```
+(Optional) Run validation scripts in each layer to verify data quality.
 
 Then open `atp_tour_analytics.pbix` in Power BI Desktop and refresh the data source connection.
 
