@@ -123,7 +123,7 @@ Comparative analysis of the best players in the dataset:
 
 Exploratory analysis and pattern discovery:
 - Upset rate by round
-- Win rate by age )
+- Win rate by age
 - Average and longest match duration
 - Count of ATP players by country with highest-ever ranking on hover
 - Average aces per match by height group
@@ -139,7 +139,7 @@ Run scripts in the following order:
 ```
 1. sql/bronze/        → create tables and load raw CSV data
 2. sql/silver/        → run stored procedures for players and matches
-3. sql/gold/          → run dimension scripts first, then fact scripts, then analytical views
+3. sql/gold/          → run fact and dimension scripts first, then then analytical views
 ```
 
 Then open `atp_tour_analytics.pbix` in Power BI Desktop and refresh the data source connection.

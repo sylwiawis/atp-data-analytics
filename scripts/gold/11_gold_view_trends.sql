@@ -33,6 +33,7 @@ SELECT
 FROM gold.fact_match_player_stats s
 LEFT JOIN gold.fact_match m ON s.match_id = m.match_id;
 
+GO
 
 /*
 ============================================================
