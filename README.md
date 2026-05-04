@@ -143,7 +143,7 @@ Exploratory analysis and pattern discovery:
 
 An interactive version of the dashboard is available online:
 
-* *
+🔗 **[Live Interactive Dashboard](https://sylwiawis.github.io/atp-data-analytics/)**
 
 Users with a Power BI account can explore the report without downloading the project.
 
