@@ -12,11 +12,6 @@ An end-to-end data analytics project built on ATP Tour match data from 2000 to 2
 
 Raw data sourced from [TML Database](https://github.com/Tennismylife/TML-Database) — a complete, live-updated database of ATP tournaments and matches, originally inspired by Jeff Sackmann's tennis_atp repository.
 
-Download the following files from the source repository:
-
-* ATP match data (2000–2025) — yearly CSV files (`YYYY.csv`)
-* Player data — `ATP_Database.csv`
-
 ---
 
 ## Project Architecture
@@ -104,11 +99,8 @@ Quality checks were performed at each layer (bronze, silver, gold) to validate r
 
 ## Dashboard Overview
 
-An interactive version of the dashboard is available online:
-
-🔗 **[Live Interactive Dashboard](https://sylwiawis.github.io/atp-data-analytics/)**
-
-Users with a Power BI account can explore the report without downloading the project.
+Download `powerbi/atp_tour_analytics.pbix` and open in Power BI Desktop.
+No database connection required — data is embedded in the file.
 
 ---
 
@@ -147,19 +139,23 @@ Exploratory analysis and pattern discovery:
 
 ---
 
-## How to Run
-
-Run scripts in the following order:
+## Reproducing the Data Pipeline
+To rebuild the data warehouse from scratch:
+1. Download raw CSV files from [TML Database](https://github.com/Tennismylife/TML-Database)
+	* ATP match data (2000–2025) — yearly CSV files (`YYYY.csv`)
+	* Player data — `ATP_Database.csv`
+2. Update file paths in `sql/bronze/02_load_bronze_layer.sql` to match your local machine
+3. Run SQL scripts in the following order:
 
 ```
-0. sql/00_init.sql    → create database and schemas
-1. sql/bronze/        → create tables and load raw CSV data
-2. sql/silver/        → run stored procedures for players and matches
-3. sql/gold/          → run fact and dimension scripts first, then then analytical views
+   - sql/00_init.sql    → create database and schemas
+   - sql/bronze/        → create tables and load raw CSV data
+   - sql/silver/        → run stored procedures for players and matches
+   - sql/gold/          → run fact and dimension scripts first, then analytical views
 ```
 (Optional) Run validation scripts in each layer to verify data quality.
 
-Then open `atp_tour_analytics.pbix` in Power BI Desktop and refresh the data source connection.
+4. Open `.pbix` file and update data source connection to your local SQL Server instance
 
 ---
 
